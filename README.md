@@ -20,11 +20,12 @@ This library is **EXPERIMENTAL** and implements a minimal subset of the function
 Version 0.1.0 includes reading the temperature and humidity register and the manufacturer-ID register.
 Furthermore one can set an offset for temperature and humidity.
 
-Version 0.1.0 does not support reading or writing other registers.
+Version 0.1.0 does support reading or writing other registers by generic wrappers.
+Read the datasheet for the register details.
 
 |  sensor       |  range        |  accuracy\*  |  resolution  |
 |:-------------:|:-------------:|:------------:|:------------:|
-|  temperature  |  -40�..125캜  |  max 0.5캜   |  0.03125캜   |
+|  temperature  |  -40째..125째C  |  max 0.5째C   |  0.03125째C   |
 |  humidity     |  0%..100% RH  |  max 2% RH   |  0.02% RH    |
 
 \* Accuracy for full range.
@@ -172,6 +173,15 @@ e.g. https://github.com/RobTillaart/MultiMap
 - **uint16_t getManufacturer()** returns 0x5959.
 
 
+#### Register Access
+
+Temporary wrappers to access the registers.
+Read the datasheet for the details.
+
+- **uint16_t readRegister(uint8_t reg)**
+- **int writeRegister(uint8_t reg, uint16_t value)**
+
+
 ## Future
 
 #### Must
@@ -187,6 +197,7 @@ e.g. https://github.com/RobTillaart/MultiMap
 - implement more functionality
   - keep in sync with CHT8305 where possible
   - (unit) test where possible
+  - refactor.
 - test different platforms
   - AVR, ESP32, ESP8266, STM32, RP2040, ...
 - add examples
