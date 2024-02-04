@@ -63,11 +63,11 @@ int CHT8310::read()
 
   //  DATASHEET P13
   int16_t tmp = (data[0] << 8 | data[1]);
-  if (_EM == 0)
+  if (_resolution == 13)
   {
     _temperature = (tmp >> 3) * 0.03125;
   }
-  else
+  else  //  _resolution == 14
   {
     _temperature = (tmp >> 2) * 0.03125;
   }
@@ -101,11 +101,11 @@ int CHT8310::readTemperature()
 
   //  DATASHEET P13
   int16_t tmp = (data[0] << 8 | data[1]);
-  if (_EM == 0)
+  if (_resolution == 13)
   {
     _temperature = (tmp >> 3) * 0.03125;
   }
-  else
+  else  //  _resolution == 14
   {
     _temperature = (tmp >> 2) * 0.03125;
   }
@@ -212,6 +212,28 @@ uint16_t CHT8310::getManufacturer()
   _readRegister(CHT8310_REG_MANUFACTURER, &data[0], 2);
   uint16_t tmp = data[0] << 8 | data[1];
   return tmp;
+}
+
+
+////////////////////////////////////////////////
+//
+//  ACCESS REGISTERS
+//
+uint16_t CHT8310::readRegister(uint8_t reg)
+{
+  uint8_t data[2] = { 0, 0 };
+  _readRegister(reg, &data[0], 2);
+  uint16_t tmp = data[0] << 8 | data[1];
+  return tmp;
+}
+
+
+int CHT8310::writeRegister(uint8_t reg, uint16_t value)
+{
+  uint8_t data[2];
+  data[0] = value & 0xFF;
+  data[1] = value >> 8;
+  return _writeRegister(reg, data, 2);
 }
 
 

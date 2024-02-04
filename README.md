@@ -16,28 +16,35 @@ Arduino library for CHT8310 temperature and humidity sensor.
 
 ## Description
 
-This library is **EXPERIMENTAL** and implements a minimal subset of its functionality.
-This includes reading the temperature and humidity register and the manufacturer-ID register.
+This library is **EXPERIMENTAL** and implements a minimal subset of the functionality of the sensor.
+Version 0.1.0 includes reading the temperature and humidity register and the manufacturer-ID register.
+Furthermore one can set an offset for temperature and humidity.
 
-Version 0.1.0 does not support reading or writing other registers.
+Version 0.1.0 does support reading or writing other registers by generic wrappers.
+Read the datasheet for the register details.
 
 |  sensor       |  range        |  accuracy\*  |  resolution  |
 |:-------------:|:-------------:|:------------:|:------------:|
-|  temperature  |  -40�..125캜  |  max 0.5캜   |  0.03125캜   |
+|  temperature  |  -40째..125째C  |  max 0.5째C   |  0.03125째C   |
 |  humidity     |  0%..100% RH  |  max 2% RH   |  0.02% RH    |
 
 \* Accuracy for full range.
-More exact details for smaller ranges, see datasheet (page 8).
+More exact details for smaller ranges, see datasheet.
 
 The library is based upon https://github.com/RobTillaart/CHT8305
-which is a simpler and not compatible sensor.
+which is a simpler and unfortunately not an compatible sensor.
 
 If you are able to test this library, please share your experiences.
 
 
 #### Tests
 
-- not done yet
+- not done yet.
+
+
+#### Related
+
+-  https://github.com/RobTillaart/CHT8305
 
 
 ## Hardware
@@ -53,7 +60,7 @@ Always check datasheet for connections.
 //     SCL ----| SCL           |
 //      ?  ----| AD0           |   ? depends on address see table below.
 //             |               |
-//         ----|               |
+//      x  ----| ALERT         |   x not suppported yet
 //             +---------------+
 //
 //  check datasheet
@@ -140,10 +147,8 @@ so you can call only one of them every second.
 
 #### Conversion delay
 
-- **void setConversionDelay(uint8_t cd = 14)** default is 14 milliseconds (datasheet).
-7 ms failed. 8 ms worked, so values below 8 are mapped to 8 in the library.
-Expect 10 ms is pretty save. Use at own risk.
-It might be that lower resolutions allow shorter delays. This is not tested.
+- **void setConversionDelay(uint8_t cd = 11)** default is 11 milliseconds (datasheet P8).
+Not tested what is the optimum.
 - **uint8_t getConversionDelay()** returns set value.
 
 
@@ -168,6 +173,15 @@ e.g. https://github.com/RobTillaart/MultiMap
 - **uint16_t getManufacturer()** returns 0x5959.
 
 
+#### Register Access
+
+Temporary wrappers to access the registers.
+Read the datasheet for the details.
+
+- **uint16_t readRegister(uint8_t reg)**
+- **int writeRegister(uint8_t reg, uint16_t value)**
+
+
 ## Future
 
 #### Must
@@ -183,6 +197,7 @@ e.g. https://github.com/RobTillaart/MultiMap
 - implement more functionality
   - keep in sync with CHT8305 where possible
   - (unit) test where possible
+  - refactor.
 - test different platforms
   - AVR, ESP32, ESP8266, STM32, RP2040, ...
 - add examples
