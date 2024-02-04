@@ -63,11 +63,11 @@ int CHT8310::read()
 
   //  DATASHEET P13
   int16_t tmp = (data[0] << 8 | data[1]);
-  if (_EM == 0)
+  if (_resolution == 13)
   {
     _temperature = (tmp >> 3) * 0.03125;
   }
-  else
+  else  //  _resolution == 14
   {
     _temperature = (tmp >> 2) * 0.03125;
   }
@@ -101,11 +101,11 @@ int CHT8310::readTemperature()
 
   //  DATASHEET P13
   int16_t tmp = (data[0] << 8 | data[1]);
-  if (_EM == 0)
+  if (_resolution == 13)
   {
     _temperature = (tmp >> 3) * 0.03125;
   }
-  else
+  else  //  _resolution == 14
   {
     _temperature = (tmp >> 2) * 0.03125;
   }
