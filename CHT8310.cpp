@@ -61,13 +61,22 @@ int CHT8310::read()
   uint8_t data[4] = { 0, 0, 0, 0 };
   _readRegister(CHT8310_REG_TEMPERATURE, &data[0], 4);
 
-  uint16_t tmp = data[0] << 8 | data[1];
-  _temperature = tmp * (165.0 / 65535.0) - 40.0;
-   tmp = data[2] << 8 | data[3];
-  _humidity    = tmp * (1.0 / 655.35);  //  == / 65535 * 100%
+  //  DATASHEET P13
+  int16_t tmp = (data[0] << 8 | data[1]);
+  if (_EM == 0)
+  {
+    _temperature = (tmp >> 3) * 0.03125;
+  }
+  else
+  {
+    _temperature = (tmp >> 2) * 0.03125;
+  }
+  //  DATASHEET P14
+  tmp = data[2] << 8 | data[3];
+  _humidity = tmp * (1.0 / 327.67);  //  == / 32767 * 100%
 
   if (_tempOffset != 0.0) _temperature += _tempOffset;
-  if (_humOffset  != 0.0) 
+  if (_humOffset  != 0.0)
   {
     _humidity += _humOffset;
     if (_humidity < 0.0)   _humidity = 0.0;
@@ -90,8 +99,16 @@ int CHT8310::readTemperature()
   uint8_t data[2] = { 0, 0 };
   _readRegister(CHT8310_REG_TEMPERATURE, &data[0], 2);
 
-  uint16_t tmp = data[0] << 8 | data[1];
-  _temperature = tmp * (165.0 / 65535.0) - 40.0;
+  //  DATASHEET P13
+  int16_t tmp = (data[0] << 8 | data[1]);
+  if (_EM == 0)
+  {
+    _temperature = (tmp >> 3) * 0.03125;
+  }
+  else
+  {
+    _temperature = (tmp >> 2) * 0.03125;
+  }
 
   if (_tempOffset != 0.0)
   {
@@ -114,10 +131,11 @@ int CHT8310::readHumidity()
   uint8_t data[2] = { 0, 0 };
   _readRegister(CHT8310_REG_HUMIDITY, &data[0], 2);
 
-  uint16_t tmp = data[0] << 8 | data[1];
-  _humidity    = tmp * (1.0 / 655.35);  //  == / 65535 * 100%
+  //  DATASHEET P14
+  int16_t tmp = data[0] << 8 | data[1];
+  _humidity = tmp * (1.0 / 327.67);  //  == / 32767 * 100%
 
-  if (_humOffset  != 0.0)
+  if (_humOffset != 0.0)
   {
     _humidity += _humOffset;
     if (_humidity < 0.0)   _humidity = 0.0;
