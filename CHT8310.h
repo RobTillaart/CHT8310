@@ -98,6 +98,8 @@ private:
   uint32_t _lastRead        = 0;
   uint8_t  _conversionDelay = 14;
 
+  uint8_t  _EM = 0;  //  configuration register
+
   TwoWire* _wire;
   uint8_t  _address         = CHT8310_DEFAULT_ADDRESS;
 
