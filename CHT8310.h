@@ -104,6 +104,8 @@ private:
 
   uint8_t  _resolution      = 13;  //  configuration register EM
 
+  uint8_t  _EM = 0;  //  configuration register
+
   TwoWire* _wire;
   uint8_t  _address         = CHT8310_DEFAULT_ADDRESS;
 
