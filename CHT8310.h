@@ -89,6 +89,10 @@ public:
   //  META DATA
   uint16_t getManufacturer();     //  expect 0x5959
 
+  //  PATCH TO ACCESS REGISTERS
+  uint16_t readRegister(uint8_t reg);
+  int      writeRegister(uint8_t reg, uint16_t value);
+  
 
 private:
   float    _humOffset       = 0.0;
@@ -96,7 +100,9 @@ private:
   float    _humidity        = 0.0;
   float    _temperature     = 0.0;
   uint32_t _lastRead        = 0;
-  uint8_t  _conversionDelay = 14;
+  uint8_t  _conversionDelay = 14;  //  11  datasheet P8
+
+  uint8_t  _EM = 0;  //  configuration register
 
   TwoWire* _wire;
   uint8_t  _address         = CHT8310_DEFAULT_ADDRESS;

@@ -16,8 +16,9 @@ Arduino library for CHT8310 temperature and humidity sensor.
 
 ## Description
 
-This library is **EXPERIMENTAL** and implements a minimal subset of its functionality.
-This includes reading the temperature and humidity register and the manufacturer-ID register.
+This library is **EXPERIMENTAL** and implements a minimal subset of the functionality of the sensor.
+Version 0.1.0 includes reading the temperature and humidity register and the manufacturer-ID register.
+Furthermore one can set an offset for temperature and humidity.
 
 Version 0.1.0 does not support reading or writing other registers.
 
@@ -27,17 +28,22 @@ Version 0.1.0 does not support reading or writing other registers.
 |  humidity     |  0%..100% RH  |  max 2% RH   |  0.02% RH    |
 
 \* Accuracy for full range.
-More exact details for smaller ranges, see datasheet (page 8).
+More exact details for smaller ranges, see datasheet.
 
 The library is based upon https://github.com/RobTillaart/CHT8305
-which is a simpler and not compatible sensor.
+which is a simpler and unfortunately not an compatible sensor.
 
 If you are able to test this library, please share your experiences.
 
 
 #### Tests
 
-- not done yet
+- not done yet.
+
+
+#### Related
+
+-  https://github.com/RobTillaart/CHT8305
 
 
 ## Hardware
@@ -53,7 +59,7 @@ Always check datasheet for connections.
 //     SCL ----| SCL           |
 //      ?  ----| AD0           |   ? depends on address see table below.
 //             |               |
-//         ----|               |
+//      x  ----| ALERT         |   x not suppported yet
 //             +---------------+
 //
 //  check datasheet
@@ -140,10 +146,8 @@ so you can call only one of them every second.
 
 #### Conversion delay
 
-- **void setConversionDelay(uint8_t cd = 14)** default is 14 milliseconds (datasheet).
-7 ms failed. 8 ms worked, so values below 8 are mapped to 8 in the library.
-Expect 10 ms is pretty save. Use at own risk.
-It might be that lower resolutions allow shorter delays. This is not tested.
+- **void setConversionDelay(uint8_t cd = 11)** default is 11 milliseconds (datasheet P8).
+Not tested what is the optimum.
 - **uint8_t getConversionDelay()** returns set value.
 
 

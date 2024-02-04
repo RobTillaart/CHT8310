@@ -55,8 +55,7 @@ unittest(test_constants_II)
 
 
 
-  assertEqual(0xFE, CHT8310_REG_MANUFACTURER);
-  assertEqual(0xFF, CHT8310_REG_VERSION);
+  assertEqual(0xFF, CHT8310_REG_MANUFACTURER);
 }
 
 
