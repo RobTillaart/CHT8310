@@ -143,10 +143,12 @@ Will return the same value until **read()** or **readTemperature()** is called a
 Will return the same value until **read()** or **readHumidity()** is called again.
 
 Note: read(), readTemperature() and readHumidity() blocks each other,
-so you can call only one of them every second.
+so you can call only one of them every second (see Convert Rate below).
 
 
 #### Conversion delay
+
+Check datasheet for details.
 
 - **void setConversionDelay(uint8_t cd = 11)** default is 11 milliseconds (datasheet P8).
 Not tested what is the optimum.
@@ -169,6 +171,29 @@ consider a mapping function for temperature and humidity.
 e.g. https://github.com/RobTillaart/MultiMap
 
 
+#### Convert Rate
+
+Check datasheet for details.
+
+The idea is that longer conversions stabilize the measurement.
+
+- **void setConvertRate(uint8_t rate = 4)** set convert rate, see table below.
+Default value = 4 meaning 
+- **uint8_t getConvertRate()** returns the set rate.
+
+
+|  value |  measurement  |  frequency  |  notes  |
+|:------:|:-------------:|:-----------:|:-------:|
+|   0    |     120 s     |  1/120 Hz   |
+|   1    |      60 s     |   1/60 Hz   |
+|   2    |      10 s     |    0.1 Hz   |
+|   3    |       5 s     |    0.2 Hz   |
+|   4    |       1 s     |      1 Hz   |  default
+|   5    |     500 ms    |      2 Hz   |
+|   6    |     250 ms    |      4 Hz   |
+|   7    |     125 ms    |      8 Hz   |
+
+
 #### ALERT
 
 Check datasheet for details.
@@ -185,9 +210,10 @@ ALERT pin triggers default on both temperature and humidity.
 
 See also **getStatusRegister()**
 
+
 #### Status register
 
-See details datasheet.
+Check datasheet for details.
 
 - ** uint16_t getStatusRegister()**
 
@@ -200,6 +226,11 @@ See details datasheet.
 |   11  |  Hlow   |  humidity exceeded
 
 
+#### SoftwareReset
+
+- **void softwareReset()** idem.
+
+
 #### Meta data
 
 - **uint16_t getManufacturer()** returns 0x5959.
@@ -208,7 +239,7 @@ See details datasheet.
 #### Register Access
 
 Temporary wrappers to access the registers.
-Read the datasheet for the details.
+Check datasheet for details.
 
 - **uint16_t readRegister(uint8_t reg)**
 - **int writeRegister(uint8_t reg, uint16_t value)**
@@ -248,9 +279,7 @@ Read the datasheet for the details.
 
 - Configuration register => 10 fields, see datasheet
   - EM flag for resolution
-- Convert rate = 3 bits 
 - OneShot
-- SWRST
 
 #### Wont
 

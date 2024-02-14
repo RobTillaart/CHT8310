@@ -9,7 +9,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [0.1.1] - 2024-02-14
 - handle overflow bit in humidity
 - add ALERT T + H limit functions
-- add **getStatusRegister()**
+- add **getStatusRegister()** experimental
+- add **softwareReset()** experimental
+- add **setConvertRate(uint8_t rate = 4)** 
+- add **getConvertRate()**
 - update readme.md
 - update keywords.txt
 - minor edits

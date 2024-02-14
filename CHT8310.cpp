@@ -9,6 +9,28 @@
 #include "CHT8310.h"
 
 
+//  REGISTERS
+#define CHT8310_REG_TEMPERATURE          0x00
+#define CHT8310_REG_HUMIDITY             0x01
+#define CHT8310_REG_STATUS               0x02
+
+#define CHT8310_REG_CONVERT_RATE         0x04
+#define CHT8310_REG_TEMP_HIGH_LIMIT      0x05
+#define CHT8310_REG_TEMP_LOW_LIMIT       0x06
+#define CHT8310_REG_HUM_HIGH_LIMIT       0x07
+#define CHT8310_REG_HUM_LOW_LIMIT        0x08
+
+#define CHT8310_REG_SWRESET              0xFC
+#define CHT8310_REG_MANUFACTURER         0xFF
+
+
+//  REGISTER MASKS
+//  not implemented
+#define CHT8310_REG_CONFIG               0x03
+#define CHT8310_REG_ONESHOT              0x0F
+
+
+
 /////////////////////////////////////////////////////
 //
 // PUBLIC
@@ -223,6 +245,23 @@ float CHT8310::getTemperatureOffset()
 
 ////////////////////////////////////////////////
 //
+//  CONVERT RATE
+//
+void CHT8310::setConvertRate(uint8_t rate)
+{
+  if (rate > 7) rate = 7;
+  writeRegister(CHT8310_REG_CONVERT_RATE, rate << 8);
+}
+
+
+uint8_t CHT8310::getConvertRate()
+{
+  return (readRegister(CHT8310_REG_CONVERT_RATE) >> 8) & 0x07;
+}
+
+
+////////////////////////////////////////////////
+//
 //  ALERT
 //
 void CHT8310::setTemperatureHighLimit(float temperature)
@@ -252,9 +291,23 @@ void CHT8310::setHumidityLowLimit(float humidity)
 }
 
 
-uint16_t  CHT8310::getStatusRegister()
+////////////////////////////////////////////////
+//
+//  STATUS
+//
+uint16_t CHT8310::getStatusRegister()
 {
   return readRegister(CHT8310_REG_STATUS);
+}
+
+
+////////////////////////////////////////////////
+//
+//  SOFTWARE RESET
+//
+void CHT8310::softwareReset()
+{
+  writeRegister(CHT8310_REG_SWRESET, 0xFF);
 }
 
 
