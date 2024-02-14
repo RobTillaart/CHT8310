@@ -1,7 +1,7 @@
 //
 //    FILE: CHT8310.cpp
 //  AUTHOR: Rob Tillaart
-// VERSION: 0.1.0
+// VERSION: 0.1.1
 // PURPOSE: Arduino library for CHT8310 temperature and humidity sensor
 //     URL: https://github.com/RobTillaart/CHT8310
 
@@ -59,7 +59,11 @@ int CHT8310::read()
   _lastRead = millis();
 
   uint8_t data[4] = { 0, 0, 0, 0 };
-  _readRegister(CHT8310_REG_TEMPERATURE, &data[0], 4);
+  int status = _readRegister(CHT8310_REG_TEMPERATURE, &data[0], 4);
+  if (status != CHT8310_OK)
+  {
+    return status;
+  }
 
   //  DATASHEET P13
   int16_t tmp = (data[0] << 8 | data[1]);
@@ -189,6 +193,10 @@ uint8_t CHT8310::getConversionDelay()
 }
 
 
+////////////////////////////////////////////////
+//
+//  OFFSET
+//
 void CHT8310::setHumidityOffset(float offset)
 {
   _humOffset = offset;
@@ -210,6 +218,43 @@ float CHT8310::getHumidityOffset()
 float CHT8310::getTemperatureOffset()
 {
   return _tempOffset;
+}
+
+
+////////////////////////////////////////////////
+//
+//  ALERT
+//
+void CHT8310::setTemperatureHighLimit(float temperature)
+{
+  int16_t tmp = round(temperature / 0.03125);
+  tmp <<= 3;
+  writeRegister(CHT8310_REG_TEMP_HIGH_LIMIT, tmp);
+}
+
+void CHT8310::setTemperatureLowLimit(float temperature)
+{
+  int16_t tmp = round(temperature / 0.03125);
+  tmp <<= 3;
+  writeRegister(CHT8310_REG_TEMP_LOW_LIMIT, tmp);
+}
+
+void CHT8310::setHumidityHighLimit(float humidity)
+{
+  int16_t hum = round(humidity * 327.67);
+  writeRegister(CHT8310_REG_HUM_HIGH_LIMIT, hum);
+}
+
+void CHT8310::setHumidityLowLimit(float humidity)
+{
+  int16_t hum = round(humidity * 327.67);
+  writeRegister(CHT8310_REG_HUM_LOW_LIMIT, hum);
+}
+
+
+uint16_t  CHT8310::getStatusRegister()
+{
+  return readRegister(CHT8310_REG_STATUS);
 }
 
 

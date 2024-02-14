@@ -2,7 +2,7 @@
 //
 //    FILE: CHT8310.h
 //  AUTHOR: Rob Tillaart
-// VERSION: 0.1.0
+// VERSION: 0.1.1
 // PURPOSE: Arduino library for CHT8310 temperature and humidity sensor
 //     URL: https://github.com/RobTillaart/CHT8310
 //
@@ -12,7 +12,7 @@
 #include "Wire.h"
 
 
-#define CHT8310_LIB_VERSION              (F("0.1.0"))
+#define CHT8310_LIB_VERSION              (F("0.1.1"))
 
 //  DEFAULT ADDRESS
 #ifndef CHT8310_DEFAULT_ADDRESS
@@ -77,11 +77,21 @@ public:
 
 
   //  adding offsets works well in normal range
-  void     setHumidityOffset(float offset);
   //  might introduce under- or overflow at the ends of the sensor range
+  void     setHumidityOffset(float offset);
   void     setTemperatureOffset(float offset);
   float    getHumidityOffset();
   float    getTemperatureOffset();
+
+
+  //  ALERT (not tested, under development)
+  void     setTemperatureHighLimit(float temperature);
+  void     setTemperatureLowLimit(float temperature);
+  void     setHumidityHighLimit(float humidity);
+  void     setHumidityLowLimit(float humidity);
+
+  //  STATUS (not tested, under development)
+  uint16_t getStatusRegister();
 
 
   //  META DATA

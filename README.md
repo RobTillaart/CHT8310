@@ -77,12 +77,12 @@ Pull ups are needed on SDA, SCL.
 
 #### performance
 
-I2C bus speeds is supported up to 400 KHz.
+I2C bus speeds is supported up to 1000 KHz (datasheet P4).
 
 
 #### Addresses
 
-Check datasheet
+The CHT8310 supports up to 4 devices on the I2C bus.
 
 |  AD0  |   Address  |  Notes  |
 |:-----:|:----------:|:--------|
@@ -132,6 +132,7 @@ Returns error status.
 
 - **int read()** reads both the temperature and humidity.
 Can be called once per second.
+Return should be tested and be **CHT8310_OK**.
 - **int readTemperature()** read only temperature (slightly faster than read)
 - **int readHumidity()** read only humidity (slightly faster than read)
 - **uint32_t lastRead()** returns lastRead in MilliSeconds since start sketch.
@@ -166,6 +167,37 @@ These are not handled for temperature by the library (humidity since 0.1.7).
 If the offset is not the same over the operational range, 
 consider a mapping function for temperature and humidity.
 e.g. https://github.com/RobTillaart/MultiMap
+
+
+#### ALERT
+
+Check datasheet for details.
+
+Minimal API to set thresholds to trigger the ALERT pin.
+No range check (incl low < high) is made.
+
+ALERT pin triggers default on both temperature and humidity.
+
+- **void setTemperatureHighLimit(float temperature)**
+- **void setTemperatureLowLimit(float temperature)**
+- **void setHumidityHighLimit(float humidity)**
+- **void setHumidityLowLimit(float humidity)**
+
+See also **getStatusRegister()**
+
+#### Status register
+
+See details datasheet.
+
+- ** uint16_t getStatusRegister()**
+
+|  bit  |  name   | description  |
+|:-----:|:-------:|:-------------|
+|   15  |  Busy   |  idem
+|   14  |  Thigh  |  temperature exceeded
+|   13  |  Tlow   |  temperature exceeded
+|   12  |  Hhigh  |  humidity exceeded
+|   11  |  Hlow   |  humidity exceeded
 
 
 #### Meta data
@@ -212,22 +244,17 @@ Read the datasheet for the details.
 - add examples
   - performance.
 
-
 #### Could missing functionality
 
-- Status register = busy, THIGH, TLOW, HHIGH, HLOW bits
 - Configuration register => 10 fields, see datasheet
   - EM flag for resolution
 - Convert rate = 3 bits 
-- Temp High Limit
-- Temp Low Limit
-- Hum High Limit
-- Hum Low Limit
 - OneShot
 - SWRST
 
-
 #### Wont
+
+- getters for ALERT limits? (user can track these).
 
 
 ## Support

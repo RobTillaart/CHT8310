@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
+## [0.1.1] - 2024-02-14
+- handle overflow bit in humidity
+- add ALERT T + H limit functions
+- add **getStatusRegister()**
+- update readme.md
+- update keywords.txt
+- minor edits
+
 ## [0.1.0] - 2024-02-04
 - initial version.
 
