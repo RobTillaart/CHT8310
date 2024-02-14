@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - add **softwareReset()** experimental
 - add **setConvertRate(uint8_t rate = 4)** 
 - add **getConvertRate()**
+- add **oneShotConversion()**
 - update readme.md
 - update keywords.txt
 - minor edits
