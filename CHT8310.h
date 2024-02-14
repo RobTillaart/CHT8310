@@ -82,12 +82,16 @@ public:
   uint16_t getStatusRegister();
 
 
+  //  ONE SHOT (not tested, under development)
+  void     oneShotConversion();
+
+
   //  SOFTWARE RESET (not tested, under development)
   void     softwareReset();
 
 
   //  META DATA
-  uint16_t getManufacturer();     //  expect 0x5959
+  uint16_t getManufacturer();  //  expect 0x5959
 
 
   //  PATCH TO ACCESS REGISTERS

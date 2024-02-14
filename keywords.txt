@@ -34,6 +34,7 @@ setHumidityHighLimit	KEYWORD2
 setHumidityLowLimit	KEYWORD2
 
 getStatusRegister	KEYWORD2
+oneShotConversion	KEYWORD2
 softwareReset	KEYWORD2
 
 getManufacturer	KEYWORD2

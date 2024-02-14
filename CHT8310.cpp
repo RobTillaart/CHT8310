@@ -303,6 +303,16 @@ uint16_t CHT8310::getStatusRegister()
 
 ////////////////////////////////////////////////
 //
+//  ONE SHOT
+//
+void CHT8310::oneShotConversion()
+{
+  writeRegister(CHT8310_REG_ONESHOT, 0xFF);
+}
+
+
+////////////////////////////////////////////////
+//
 //  SOFTWARE RESET
 //
 void CHT8310::softwareReset()

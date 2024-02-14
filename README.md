@@ -226,6 +226,13 @@ Check datasheet for details.
 |   11  |  Hlow   |  humidity exceeded
 
 
+#### OneShot conversion
+
+Check datasheet for details.
+
+- **void oneShotConversion()** idem.
+
+
 #### SoftwareReset
 
 - **void softwareReset()** idem.
