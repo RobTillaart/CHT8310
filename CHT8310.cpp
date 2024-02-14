@@ -23,7 +23,7 @@ CHT8310::CHT8310(const uint8_t address, TwoWire *wire)
 int CHT8310::begin()
 {
   //  address = 0x40, 0x44, 0x48, 0x4C
-  if ((_address != 0x40) && (_address != 0x44) && (_address != 0x48) && (_address != 0x4C)) 
+  if ((_address != 0x40) && (_address != 0x44) && (_address != 0x48) && (_address != 0x4C))
   {
     return CHT8310_ERROR_ADDR;
   }
@@ -71,11 +71,22 @@ int CHT8310::read()
   {
     _temperature = (tmp >> 2) * 0.03125;
   }
+  //  Handle temperature offset.
+  if (_tempOffset != 0.0) _temperature += _tempOffset;
+
+
   //  DATASHEET P14
   tmp = data[2] << 8 | data[3];
-  _humidity = tmp * (1.0 / 327.67);  //  == / 32767 * 100%
-
-  if (_tempOffset != 0.0) _temperature += _tempOffset;
+  if (tmp & 0x8000)  //  test overflow bit
+  {
+    _humidity = 100.0;
+    return CHT8310_ERROR_HUMIDITY;
+  }
+  else
+  {
+    _humidity = (tmp & 0x7FFF) * (1.0 / 327.67);  //  == / 32767 * 100%
+  }
+  //  Handle humidity offset.
   if (_humOffset  != 0.0)
   {
     _humidity += _humOffset;

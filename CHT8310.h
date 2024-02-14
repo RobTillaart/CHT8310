@@ -25,6 +25,8 @@
 #define CHT8310_ERROR_I2C                -11
 #define CHT8310_ERROR_CONNECT            -12
 #define CHT8310_ERROR_LASTREAD           -20
+#define CHT8310_ERROR_HUMIDITY           -30
+
 
 //  REGISTERS
 #define CHT8310_REG_TEMPERATURE          0x00
@@ -34,6 +36,7 @@
 #define CHT8310_REG_MANUFACTURER         0xFF
 
 
+//  REGISTER MASKS
 //  not implemented in 0.1.0
 #define CHT8310_REG_STATUS               0x02
 #define CHT8310_REG_CONFIG               0x03
@@ -43,11 +46,6 @@
 #define CHT8310_REG_HUM_HIGH_LIMIT       0x07
 #define CHT8310_REG_HUM_LOW_LIMIT        0x08
 #define CHT8310_REG_ONESHOT              0x0F
-
-
-//  REGISTER MASKS
-//  not implemented in 0.1.0
-
 
 
 class CHT8310
@@ -103,8 +101,6 @@ private:
   uint8_t  _conversionDelay = 14;  //  11  datasheet P8
 
   uint8_t  _resolution      = 13;  //  configuration register EM
-
-  uint8_t  _EM = 0;  //  configuration register
 
   TwoWire* _wire;
   uint8_t  _address         = CHT8310_DEFAULT_ADDRESS;

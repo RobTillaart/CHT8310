@@ -182,6 +182,19 @@ Read the datasheet for the details.
 - **int writeRegister(uint8_t reg, uint16_t value)**
 
 
+## Error codes
+
+|  value  |  define                  |  notes  |
+|:-------:|:-------------------------|:--------|
+|     0   |  CHT8310_OK              |
+|   -10   |  CHT8310_ERROR_ADDR      |
+|   -11   |  CHT8310_ERROR_I2C       |
+|   -12   |  CHT8310_ERROR_CONNECT   |
+|   -20   |  CHT8310_ERROR_LASTREAD  |
+|   -30   |  CHT8310_ERROR_HUMIDITY  |
+
+
+
 ## Future
 
 #### Must
@@ -194,14 +207,25 @@ Read the datasheet for the details.
 
 #### Could
 
-- implement more functionality
-  - keep in sync with CHT8305 where possible
-  - (unit) test where possible
-  - refactor.
 - test different platforms
   - AVR, ESP32, ESP8266, STM32, RP2040, ...
 - add examples
   - performance.
+
+
+#### Could missing functionality
+
+- Status register = busy, THIGH, TLOW, HHIGH, HLOW bits
+- Configuration register => 10 fields, see datasheet
+  - EM flag for resolution
+- Convert rate = 3 bits 
+- Temp High Limit
+- Temp Low Limit
+- Hum High Limit
+- Hum Low Limit
+- OneShot
+- SWRST
+
 
 #### Wont
 
