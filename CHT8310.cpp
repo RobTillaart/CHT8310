@@ -250,7 +250,7 @@ float CHT8310::getTemperatureOffset()
 void CHT8310::setConvertRate(uint8_t rate)
 {
   if (rate > 7) rate = 7;
-  writeRegister(CHT8310_REG_CONVERT_RATE, rate << 8);
+  writeRegister(CHT8310_REG_CONVERT_RATE, ((uint16_t)rate) << 8);
 }
 
 
@@ -307,7 +307,7 @@ uint16_t CHT8310::getStatusRegister()
 //
 void CHT8310::oneShotConversion()
 {
-  writeRegister(CHT8310_REG_ONESHOT, 0xFF);
+  writeRegister(CHT8310_REG_ONESHOT, 0xFFFF);
 }
 
 
@@ -317,7 +317,7 @@ void CHT8310::oneShotConversion()
 //
 void CHT8310::softwareReset()
 {
-  writeRegister(CHT8310_REG_SWRESET, 0xFF);
+  writeRegister(CHT8310_REG_SWRESET, 0xFFFF);
 }
 
 
