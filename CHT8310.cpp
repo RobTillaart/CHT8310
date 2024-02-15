@@ -350,8 +350,8 @@ uint16_t CHT8310::readRegister(uint8_t reg)
 int CHT8310::writeRegister(uint8_t reg, uint16_t value)
 {
   uint8_t data[2];
-  data[0] = value & 0xFF;
-  data[1] = value >> 8;
+  data[1] = value & 0xFF;
+  data[0] = value >> 8;
   return _writeRegister(reg, data, 2);
 }
 
