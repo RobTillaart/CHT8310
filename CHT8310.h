@@ -54,8 +54,8 @@ public:
   float    getTemperature();   //  get cached value
 
   //  for read function
-  // void     setConversionDelay(uint8_t cd = 14);
-  // uint8_t  getConversionDelay();
+  void     setConversionDelay(uint8_t cd = 14);
+  uint8_t  getConversionDelay();
 
 
   //  adding offsets works well in normal range
