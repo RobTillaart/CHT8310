@@ -2,7 +2,7 @@
 //
 //    FILE: CHT8310.h
 //  AUTHOR: Rob Tillaart
-// VERSION: 0.1.1
+// VERSION: 0.2.0
 // PURPOSE: Arduino library for CHT8310 temperature and humidity sensor
 //     URL: https://github.com/RobTillaart/CHT8310
 //
@@ -12,7 +12,7 @@
 #include "Wire.h"
 
 
-#define CHT8310_LIB_VERSION              (F("0.1.1"))
+#define CHT8310_LIB_VERSION              (F("0.2.0"))
 
 
 //  DEFAULT ADDRESS
@@ -54,8 +54,8 @@ public:
   float    getTemperature();   //  get cached value
 
   //  for read function
-  void     setConversionDelay(uint8_t cd = 14);
-  uint8_t  getConversionDelay();
+  // void     setConversionDelay(uint8_t cd = 14);
+  // uint8_t  getConversionDelay();
 
 
   //  adding offsets works well in normal range

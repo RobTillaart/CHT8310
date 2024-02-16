@@ -80,8 +80,9 @@ int CHT8310::read()
   }
   _lastRead = millis();
 
-  uint8_t data[4] = { 0, 0, 0, 0 };
-  int status = _readRegister(CHT8310_REG_TEMPERATURE, &data[0], 4);
+  //  TEMPERATURE PART
+  uint8_t data[2] = { 0, 0 };
+  int status = _readRegister(CHT8310_REG_TEMPERATURE, &data[0], 2);
   if (status != CHT8310_OK)
   {
     return status;
@@ -101,21 +102,26 @@ int CHT8310::read()
   if (_tempOffset != 0.0) _temperature += _tempOffset;
 
 
+  //  HUMIDITY PART
+  status = _readRegister(CHT8310_REG_HUMIDITY, &data[0], 2);
+  if (status != CHT8310_OK)
+  {
+    return status;
+  }
   //  DATASHEET P14
-  tmp = data[2] << 8 | data[3];
+  tmp = data[0] << 8 | data[1];
   if (tmp & 0x8000)  //  test overflow bit
   {
     _humidity = 100.0;
     return CHT8310_ERROR_HUMIDITY;
   }
-  else
-  {
-    _humidity = (tmp & 0x7FFF) * (1.0 / 327.67);  //  == / 32767 * 100%
-  }
+  tmp &= 0x7FFF;
+  _humidity = tmp * (1.0 / 327.67);  //  == / 32767 * 100%
   //  Handle humidity offset.
   if (_humOffset  != 0.0)
   {
     _humidity += _humOffset;
+    //  handle out of range.
     if (_humidity < 0.0)   _humidity = 0.0;
     if (_humidity > 100.0) _humidity = 100.0;
   }
@@ -170,11 +176,18 @@ int CHT8310::readHumidity()
 
   //  DATASHEET P14
   int16_t tmp = data[0] << 8 | data[1];
+  if (tmp & 0x8000)  //  test overflow bit
+  {
+    _humidity = 100.0;
+    return CHT8310_ERROR_HUMIDITY;
+  }
+  tmp &= 0x7FFF;
   _humidity = tmp * (1.0 / 327.67);  //  == / 32767 * 100%
-
-  if (_humOffset != 0.0)
+  //  Handle humidity offset.
+  if (_humOffset  != 0.0)
   {
     _humidity += _humOffset;
+    //  handle out of range.
     if (_humidity < 0.0)   _humidity = 0.0;
     if (_humidity > 100.0) _humidity = 100.0;
   }
@@ -367,10 +380,10 @@ int CHT8310::_readRegister(uint8_t reg, uint8_t * buf, uint8_t size)
   int n = _wire->endTransmission();
   if (n != 0) return CHT8310_ERROR_I2C;
 
-  if (reg == CHT8310_REG_TEMPERATURE)  //  wait for conversion...
-  {
-    delay(_conversionDelay);  //  2x 6.5 ms @ 14 bit = 14  (10 works).
-  }
+  // if (reg == CHT8310_REG_TEMPERATURE)  //  wait for conversion...
+  // {
+    // delay(_conversionDelay);  //  2x 6.5 ms @ 14 bit = 14  (10 works).
+  // }
 
   n = _wire->requestFrom(_address, size);
   if (n == size)
