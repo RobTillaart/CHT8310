@@ -2,7 +2,7 @@
 //    FILE: CHT8310_performance.ino
 //  AUTHOR: Rob Tillaart
 // PURPOSE: measure performance CHT8310 I2C humidity & temperature sensor
-//     URL: https://github.com/RobTillaart/CHT8305
+//     URL: https://github.com/RobTillaart/CHT8310
 
 //  Always check datasheet - front view
 //
