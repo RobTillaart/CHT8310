@@ -256,7 +256,7 @@ Check datasheet for details.
 #### Meta data
 
 - **uint16_t getManufacturer()** Returns 0x5959 according to the datasheet,
-However in #3 a value of 8215 is seen. 
+However in #3 a value of 8215 is seen. Seems to be an other manufacturer.
 
 
 #### Register Access
@@ -304,7 +304,6 @@ Check datasheet for details.
 - Configuration register => 10 fields, see datasheet
   - EM flag for resolution
 - OneShot
-- optimize math (remove divisions if possible)
 
 #### Wont
 
