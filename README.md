@@ -255,7 +255,8 @@ Check datasheet for details.
 
 #### Meta data
 
-- **uint16_t getManufacturer()** returns 0x5959.
+- **uint16_t getManufacturer()** Returns 0x5959 according to the datasheet,
+However in #3 a value of 8215 is seen. 
 
 
 #### Register Access

@@ -127,14 +127,10 @@ int CHT8310::read()
 
 int CHT8310::readTemperature()
 {
-  //  do not read too fast
   _lastRead = millis();
 
-  uint8_t data[2] = { 0, 0 };
-  _readRegister(CHT8310_REG_TEMPERATURE, &data[0], 2);
-
+  int16_t tmp = readRegister(CHT8310_REG_TEMPERATURE);
   //  DATASHEET P13
-  int16_t tmp = (data[0] << 8 | data[1]);
   if (_resolution == 13)
   {
     _temperature = (tmp >> 3) * 0.03125;
@@ -155,14 +151,11 @@ int CHT8310::readTemperature()
 
 int CHT8310::readHumidity()
 {
-  //  do not read too fast
   _lastRead = millis();
 
-  uint8_t data[2] = { 0, 0 };
-  _readRegister(CHT8310_REG_HUMIDITY, &data[0], 2);
+  int16_t tmp = readRegister(CHT8310_REG_HUMIDITY);
 
   //  DATASHEET P14
-  int16_t tmp = data[0] << 8 | data[1];
   if (tmp & 0x8000)  //  test overflow bit
   {
     _humidity = 100.0;
@@ -343,10 +336,7 @@ void CHT8310::softwareReset()
 //
 uint16_t CHT8310::getManufacturer()
 {
-  uint8_t data[2] = { 0, 0 };
-  _readRegister(CHT8310_REG_MANUFACTURER, &data[0], 2);
-  uint16_t tmp = data[0] << 8 | data[1];
-  return tmp;
+  return readRegister(CHT8310_REG_MANUFACTURER);
 }
 
 

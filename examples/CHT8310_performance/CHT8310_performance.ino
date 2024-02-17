@@ -60,21 +60,21 @@ void testPerformance(uint32_t speed)
   stop = micros();
   Serial.print("READ:\t");
   Serial.println(stop - start);
-  delay(100);
+  delay(500);
 
   start = micros();
   CHT.readTemperature();
   stop = micros();
   Serial.print("READ T:\t");
   Serial.println(stop - start);
-  delay(100);
+  delay(500);
 
   start = micros();
   CHT.read();
   stop = micros();
   Serial.print("READ H:\t");
   Serial.println(stop - start);
-  delay(100);
+  delay(500);
   
   start = micros();
   uint16_t m = CHT.getManufacturer();
@@ -83,8 +83,9 @@ void testPerformance(uint32_t speed)
   Serial.print(m, HEX);
   Serial.print(":\t");
   Serial.println(stop - start);
-  delay(100);
+  delay(500);
 }
+
 
 void loop()
 {
