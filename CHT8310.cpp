@@ -275,14 +275,14 @@ uint8_t CHT8310::getConvertRate()
 //
 void CHT8310::setTemperatureHighLimit(float temperature)
 {
-  int16_t tmp = round(temperature / 0.03125);
+  int16_t tmp = round(temperature * (1.0 / 0.03125));
   tmp <<= 3;
   writeRegister(CHT8310_REG_TEMP_HIGH_LIMIT, tmp);
 }
 
 void CHT8310::setTemperatureLowLimit(float temperature)
 {
-  int16_t tmp = round(temperature / 0.03125);
+  int16_t tmp = round(temperature * (1.0 / 0.03125));
   tmp <<= 3;
   writeRegister(CHT8310_REG_TEMP_LOW_LIMIT, tmp);
 }
