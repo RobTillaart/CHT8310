@@ -13,21 +13,16 @@
 #define CHT8310_REG_TEMPERATURE          0x00
 #define CHT8310_REG_HUMIDITY             0x01
 #define CHT8310_REG_STATUS               0x02
-
+#define CHT8310_REG_CONFIG               0x03
 #define CHT8310_REG_CONVERT_RATE         0x04
 #define CHT8310_REG_TEMP_HIGH_LIMIT      0x05
 #define CHT8310_REG_TEMP_LOW_LIMIT       0x06
 #define CHT8310_REG_HUM_HIGH_LIMIT       0x07
 #define CHT8310_REG_HUM_LOW_LIMIT        0x08
+#define CHT8310_REG_ONESHOT              0x0F
 
 #define CHT8310_REG_SWRESET              0xFC
 #define CHT8310_REG_MANUFACTURER         0xFF
-
-
-//  REGISTER MASKS
-//  not implemented
-#define CHT8310_REG_CONFIG               0x03
-#define CHT8310_REG_ONESHOT              0x0F
 
 
 
@@ -133,10 +128,6 @@ int CHT8310::read()
 int CHT8310::readTemperature()
 {
   //  do not read too fast
-  if (millis() - _lastRead < 1000)
-  {
-    return CHT8310_ERROR_LASTREAD;
-  }
   _lastRead = millis();
 
   uint8_t data[2] = { 0, 0 };
@@ -165,10 +156,6 @@ int CHT8310::readTemperature()
 int CHT8310::readHumidity()
 {
   //  do not read too fast
-  if (millis() - _lastRead < 1000)
-  {
-    return CHT8310_ERROR_LASTREAD;
-  }
   _lastRead = millis();
 
   uint8_t data[2] = { 0, 0 };
@@ -253,6 +240,22 @@ float CHT8310::getHumidityOffset()
 float CHT8310::getTemperatureOffset()
 {
   return _tempOffset;
+}
+
+
+////////////////////////////////////////////////
+//
+//  CONFIGURATION
+//
+void CHT8310::setConfiguration(uint16_t mask)
+{
+  writeRegister(CHT8310_REG_CONFIG, mask);
+}
+
+
+uint16_t CHT8310::getConfiguration()
+{
+  return readRegister(CHT8310_REG_CONFIG);
 }
 
 
@@ -378,20 +381,20 @@ int CHT8310::_readRegister(uint8_t reg, uint8_t * buf, uint8_t size)
   _wire->beginTransmission(_address);
   _wire->write(reg);
   int n = _wire->endTransmission();
-  if (n != 0) return CHT8310_ERROR_I2C;
-
-  // if (reg == CHT8310_REG_TEMPERATURE)  //  wait for conversion...
-  // {
-    // delay(_conversionDelay);  //  2x 6.5 ms @ 14 bit = 14  (10 works).
-  // }
+  if (n != 0)
+  {
+    return CHT8310_ERROR_I2C;
+  }
 
   n = _wire->requestFrom(_address, size);
-  if (n == size)
+  if (n != size)
   {
-    for (uint8_t i = 0; i < size; i++)
-    {
-      buf[i] = _wire->read();
-    }
+    return CHT8310_ERROR_I2C;
+  }
+
+  for (uint8_t i = 0; i < size; i++)
+  {
+    buf[i] = _wire->read();
   }
   return CHT8310_OK;
 }
@@ -406,7 +409,10 @@ int CHT8310::_writeRegister(uint8_t reg, uint8_t * buf, uint8_t size)
     _wire->write(buf[i]);
   }
   int n = _wire->endTransmission();
-  if (n != 0) return CHT8310_ERROR_I2C;
+  if (n != 0)
+  {
+    return CHT8310_ERROR_I2C;
+  }
   return CHT8310_OK;
 }
 

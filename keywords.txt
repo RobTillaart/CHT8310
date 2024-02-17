@@ -25,6 +25,9 @@ setTemperatureOffset	KEYWORD2
 getHumidityOffset	KEYWORD2
 getTemperatureOffset	KEYWORD2
 
+setConfiguration	KEYWORD2
+getConfiguration	KEYWORD2
+
 setConvertRate	KEYWORD2
 getConvertRate	KEYWORD2
 

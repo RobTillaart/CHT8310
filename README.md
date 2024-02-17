@@ -39,12 +39,13 @@ If you are able to test this library, please share your experiences.
 
 #### Tests
 
-- not done yet.
+Many initial tests performed by YouCanNotBeSerious. Thanks.
 
 
 #### Related
 
--  https://github.com/RobTillaart/CHT8305
+- https://github.com/RobTillaart/Temperature (e.g. heatIndex)
+- https://github.com/RobTillaart/CHT8305
 
 
 ## Hardware
@@ -130,16 +131,18 @@ Returns error status.
 
 #### Core
 
-- **int read()** reads both the temperature and humidity.
-Can be called once per second.
+- **int read()** reads both the temperature and humidity from the sensor.
+Can be called at most once per second, otherwise it will return **CHT8310_ERROR_LASTREAD**
 Return should be tested and be **CHT8310_OK**.
-- **int readTemperature()** read only temperature (slightly faster than read)
-- **int readHumidity()** read only humidity (slightly faster than read)
+- **int readTemperature()** read only temperature from the sensor, therefore faster than read().
+This function does not check the lastRead flag, but does set it.
+- **int readHumidity()** read only humidity from the sensor, therefore faster than read().
+This function does not check the lastRead flag, but does set it.
 - **uint32_t lastRead()** returns lastRead in MilliSeconds since start sketch.
 Useful to check when it is time to call **read()** again, or for logging.
-- **float getHumidity()** returns last humidity read.
-Will return the same value until **read()** or **readTemperature()** is called again.
 - **float getTemperature()** returns last temperature read.
+Will return the same value until **read()** or **readTemperature()** is called again.
+- **float getHumidity()** returns last humidity read.
 Will return the same value until **read()** or **readHumidity()** is called again.
 
 Note: read(), readTemperature() and readHumidity() blocks each other,
@@ -148,6 +151,7 @@ so you can call only one of them every second (see Convert Rate below).
 
 #### Conversion delay
 
+Not functional for now, need investigation.
 Check datasheet for details.
 
 - **void setConversionDelay(uint8_t cd = 11)** default is 11 milliseconds (datasheet P8).
@@ -159,10 +163,11 @@ Not tested what is the optimum.
 
 Adding offsets works well in the "normal range" but might introduce 
 under- or overflow at the ends of the sensor range.
-These are not handled for temperature by the library (humidity since 0.1.7).
+These are not handled for temperature by the library, humidity is constrained.
   
 - **void setHumidityOffset(float offset)** idem.
 - **void setTemperatureOffset(float offset)** idem.
+This function can be used to set return temperature in Kelvin!
 - **float getHumidityOffset()** idem.
 - **float getTemperatureOffset()** idem.
 
@@ -171,11 +176,21 @@ consider a mapping function for temperature and humidity.
 e.g. https://github.com/RobTillaart/MultiMap
 
 
+#### Configuration
+
+To be elaborated (table / functions)
+
+Check datasheet for details about the bit fields.
+
+- **void setConfiguration(uint16_t mask)** set a bit mask
+- **uint16_t getConfiguration()** returns current mask
+
+
 #### Convert Rate
 
 Check datasheet for details.
 
-The idea is that longer conversions stabilize the measurement.
+The idea is that longer conversion times stabilize the measurement.
 
 - **void setConvertRate(uint8_t rate = 4)** set convert rate, see table below.
 Default value = 4 meaning 
@@ -199,7 +214,7 @@ Default value = 4 meaning
 Check datasheet for details.
 
 Minimal API to set thresholds to trigger the ALERT pin.
-No range check (incl low < high) is made.
+No range check (e.g. low < high) is made.
 
 ALERT pin triggers default on both temperature and humidity.
 
@@ -264,13 +279,13 @@ Check datasheet for details.
 |   -30   |  CHT8310_ERROR_HUMIDITY  |
 
 
-
 ## Future
 
 #### Must
 
 - elaborate documentation.
-- test with hardware 
+- test with hardware
+- implement configuration functions.
 
 #### Should
 
@@ -279,14 +294,16 @@ Check datasheet for details.
 
 - test different platforms
   - AVR, ESP32, ESP8266, STM32, RP2040, ...
-- add examples
-  - performance.
+- improve error handling
+  - **int lastError()**
+  - forward return values
 
 #### Could missing functionality
 
 - Configuration register => 10 fields, see datasheet
   - EM flag for resolution
 - OneShot
+- optimize math (remove divisions if possible)
 
 #### Wont
 

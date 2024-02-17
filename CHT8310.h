@@ -50,10 +50,10 @@ public:
 
   //  lastRead is in MilliSeconds since start sketch
   uint32_t lastRead();
-  float    getHumidity();      //  get cached value
   float    getTemperature();   //  get cached value
+  float    getHumidity();      //  get cached value
 
-  //  for read function
+  //  (not functional yet)
   void     setConversionDelay(uint8_t cd = 14);
   uint8_t  getConversionDelay();
 
@@ -66,7 +66,12 @@ public:
   float    getTemperatureOffset();
 
 
-  //  CONVERT RATE (not tested, under development)
+  //  CONFIGURATION (elementary, see datasheet for bits);
+  void     setConfiguration(uint16_t mask);
+  uint16_t getConfiguration();  // returns mask
+
+
+  //  CONVERT RATE
   void     setConvertRate(uint8_t rate = 4);
   uint8_t  getConvertRate();
 
@@ -97,7 +102,7 @@ public:
   //  PATCH TO ACCESS REGISTERS
   uint16_t readRegister(uint8_t reg);
   int      writeRegister(uint8_t reg, uint16_t value);
-  
+
 
 private:
   float    _humOffset       = 0.0;
