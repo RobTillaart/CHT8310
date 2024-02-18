@@ -80,6 +80,30 @@ Pull ups are needed on SDA, SCL.
 
 I2C bus speeds is supported up to 1000 KHz (datasheet P4).
 
+An indicative table of times in micros on an ESP32-C3 for various I2C clock speeds.
+Note that the performance gain of higher clock speeds become less and less
+while robustness decreases with it. 
+
+Times in micros on an ESP32-C3 (See #3 for more)
+
+|  Version  |  Speed   |   READ   |  READ T  |  READ H  | getManufacturer  |
+|:---------:|:--------:|:--------:|:--------:|:--------:|:----------------:|
+|   0.2.0   |   50000  |   2165   |   1060   |   2116   |   1051           |
+|   0.2.0   |  100000  |   1164   |    582   |   1168   |    578           |
+|   0.2.0   |  150000  |    855   |    428   |    860   |    424           |
+|   0.2.0   |  200000  |    654   |    327   |    658   |    323           |
+|   0.2.0   |  300000  |    491   |    246   |    496   |    242           |
+|   0.2.0   |  400000  |    418   |    209   |    422   |    205           |
+|   0.2.0   |  500000  |    372   |    186   |    376   |    182           |
+|   0.2.0   |  600000  |    345   |    173   |    349   |    169           |
+
+The **read()** call uses two I2C calls so it makes sense that it takes twice
+as long as **readTemperature()** and **getManufacturer()** which only use 
+one I2C call to the device.
+**getManufacturer()** is a bit faster as **readTemperature()** as the latter 
+needs to do some conversion math.
+The "extreme" longer duration of **readHumidity()** needs further investigation.
+
 
 #### Addresses
 

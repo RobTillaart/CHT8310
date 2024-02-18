@@ -70,7 +70,7 @@ void testPerformance(uint32_t speed)
   delay(500);
 
   start = micros();
-  CHT.read();
+  CHT.readHumidity();
   stop = micros();
   Serial.print("READ H:\t");
   Serial.println(stop - start);
